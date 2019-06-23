@@ -1,0 +1,15 @@
+HKCR
+{
+	NoRemove CLSID
+	{
+		ForceRemove {b5db2ea3-dd1b-492a-b2d5-1c6f7145a7b2} = s 'CoMFPipeTest class'
+		{
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Neutral'
+			}
+			TypeLib = s '{6e988471-3743-48d5-876a-07bfcdfacd17}'
+			Version = s '1.0'
+		}
+	}
+}

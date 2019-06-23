@@ -1,0 +1,27 @@
+// MFPipeTest.idl : IDL source for MFPipeTest
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (MFPipeTest.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+import "IDL/MInterfaces.idl";
+
+[
+	uuid(6e988471-3743-48d5-876a-07bfcdfacd17),
+	version(1.0),
+]
+library MFPipeTestLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(b5db2ea3-dd1b-492a-b2d5-1c6f7145a7b2)
+	]
+	coclass CoMFPipeTest
+	{
+		[default] interface IMFPipe;
+	};
+};
+
+import "shobjidl.idl";

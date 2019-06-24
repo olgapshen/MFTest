@@ -40,22 +40,19 @@
     <ClCompile Include="MIDL32\MFPipeTest_i.c">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="TCPSender.cpp">
+    <ClCompile Include="TransmitterBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TCPReceiver.cpp">
+    <ClCompile Include="MFDataWriter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UDPSender.cpp">
+    <ClCompile Include="MFDataReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UDPReceiver.cpp">
+    <ClCompile Include="UDPTransmitter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ReceiverBase.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SenderBase.cpp">
+    <ClCompile Include="TCPTransmitter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -87,22 +84,19 @@
     <ClInclude Include="MIDL32\MInterfaces.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
-    <ClInclude Include="TCPSender.h">
+    <ClInclude Include="TransmitterBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TCPReceiver.h">
+    <ClInclude Include="MFDataReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="UDPSender.h">
+    <ClInclude Include="MFDataWriter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="UDPReceiver.h">
+    <ClInclude Include="TCPTransmitter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ReceiverBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SenderBase.h">
+    <ClInclude Include="UDPTransmitter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

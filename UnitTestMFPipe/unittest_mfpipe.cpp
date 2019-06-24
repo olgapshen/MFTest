@@ -44,7 +44,7 @@ namespace UnitTestMFPipe
 				Assert::IsNotNull(arrMFBuffersIn[i].p);
 
 				// Fill buffer
-				LONG cbMaxSize = 0, cbActualSize = 0;
+				LONG cbMaxSize = 0, cbActualSize = cbSize;
 				LONGLONG lpData = NULL;
 				arrMFBuffersIn[i]->BufferLock(eMFLT_NoLock, &cbMaxSize, &cbActualSize, &lpData);
 
@@ -52,6 +52,8 @@ namespace UnitTestMFPipe
 				LPBYTE _q = (LPBYTE)lpData;
 				for (DWORD i = 0; i < cbSize; i++)
 					_q[i] = rand() % 0xFF;
+
+				//arrMFBuffersIn[i]->BufferUnlock();
 			}
 
 			//////////////////////////////////////////////////////////////////////////
@@ -125,6 +127,7 @@ namespace UnitTestMFPipe
 
 			for (int i = 0; i < 128; ++i)
 			{
+				//arrMFBuffersIn[i % PACKETS_COUNT]->
 				// Write to pipe
 				cpMFPipe_Write->PipePut(L"ch1", arrMFBuffersIn[i % PACKETS_COUNT], 0, NULL);
 				cpMFPipe_Write->PipePut(L"ch2", arrMFBuffersIn[(i + 1) % PACKETS_COUNT], 0, NULL);

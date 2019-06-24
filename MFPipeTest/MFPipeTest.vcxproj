@@ -138,21 +138,20 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="MFDataReader.cpp" />
+    <ClCompile Include="MFDataWriter.cpp" />
     <ClCompile Include="MFPipeTest.cpp" />
     <ClCompile Include="MIDL32\MFPipeTest_i.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="ReceiverBase.cpp" />
-    <ClCompile Include="SenderBase.cpp" />
+    <ClCompile Include="TransmitterBase.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="TCPSender.cpp" />
-    <ClCompile Include="TCPReceiver.cpp" />
-    <ClCompile Include="UDPSender.cpp" />
-    <ClCompile Include="UDPReceiver.cpp" />
+    <ClCompile Include="TCPTransmitter.cpp" />
+    <ClCompile Include="UDPTransmitter.cpp" />
     <ClCompile Include="xdlldata.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
@@ -163,18 +162,17 @@
   <ItemGroup>
     <ClInclude Include="CoMFPipeTest.h" />
     <ClInclude Include="dllmain.h" />
+    <ClInclude Include="MFDataReader.h" />
+    <ClInclude Include="MFDataWriter.h" />
     <ClInclude Include="MIDL32\MDefines.h" />
     <ClInclude Include="MIDL32\MFPipeTest_i.h" />
     <ClInclude Include="MIDL32\MInterfaces.h" />
-    <ClInclude Include="ReceiverBase.h" />
     <ClInclude Include="Resource.h" />
-    <ClInclude Include="SenderBase.h" />
+    <ClInclude Include="TransmitterBase.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="TCPSender.h" />
-    <ClInclude Include="TCPReceiver.h" />
-    <ClInclude Include="UDPSender.h" />
-    <ClInclude Include="UDPReceiver.h" />
+    <ClInclude Include="TCPTransmitter.h" />
+    <ClInclude Include="UDPTransmitter.h" />
     <ClInclude Include="xdlldata.h" />
   </ItemGroup>
   <ItemGroup>

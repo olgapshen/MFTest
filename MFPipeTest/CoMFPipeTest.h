@@ -4,9 +4,7 @@
 #include <memory>
 #include "resource.h"       // main symbols
 #include "MFPipeTest_i.h"
-#include "SenderBase.h"
-#include "SenderBase.h"
-#include "ReceiverBase.h"
+#include "TransmitterBase.h"
 
 #ifdef _WIN32_WCE
 #error "Neutral-threaded COM objects are not supported on Windows CE."
@@ -22,8 +20,7 @@ class ATL_NO_VTABLE CCoMFPipeTest :
 	public IMFPipe
 {
 private:
-	std::unique_ptr<SenderBase> *sender;
-	std::unique_ptr<ReceiverBase> *receiver;
+	std::unique_ptr<TransmitterBase> transmitter;
 
 public:
 	CCoMFPipeTest()

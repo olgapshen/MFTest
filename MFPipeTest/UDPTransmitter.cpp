@@ -2,15 +2,13 @@
 #include "UDPTransmitter.h"
 
 #include <cassert>
+#include "MFTypes.h"
 
 using namespace std;
 
 UDPTransmitter::UDPTransmitter(string aAdress, int aPort) : TransmitterBase(aAdress, aPort)
 {
 	struct addrinfo hints;
-
-	//wstring ws(aAdress);
-	//address = string(ws.begin(), ws.end());
 
 	ZeroMemory(&hints, sizeof(hints));
 	hints.ai_family = AF_INET;
@@ -41,14 +39,13 @@ UDPTransmitter::UDPTransmitter(string aAdress, int aPort) : TransmitterBase(aAdr
 		return;
 	}
 
-	//https://docs.microsoft.com/en-us/windows/desktop/winsock/windows-sockets-error-codes-2
 	iResult = connect(ConnectSocket, resultSend->ai_addr, (int)resultSend->ai_addrlen);
 	if (iResult == SOCKET_ERROR) {
-		//int err = WSAGetLastError();
-		//freeaddrinfo(resultSend);
-		//WSACleanup();
-		//closesocket(ConnectSocket);
-		//ConnectSocket = INVALID_SOCKET;
+		int err = WSAGetLastError();
+		freeaddrinfo(resultSend);
+		WSACleanup();
+		closesocket(ConnectSocket);
+		ConnectSocket = INVALID_SOCKET;
 		result = E_FAIL;
 		return;
 	}
@@ -59,18 +56,13 @@ UDPTransmitter::UDPTransmitter(string aAdress, int aPort) : TransmitterBase(aAdr
 	result = S_OK;
 }
 
-UDPTransmitter::~UDPTransmitter()
-{
-}
+UDPTransmitter::~UDPTransmitter() {}
 
 void UDPTransmitter::receive()
 {
 	ListenSocket = INVALID_SOCKET;
 
 	struct addrinfo hints;
-
-	//wstring ws(adress);
-	//string str(ws.begin(), ws.end());
 
 	ZeroMemory(&hints, sizeof(hints));
 	hints.ai_family = AF_INET;
@@ -110,15 +102,24 @@ void UDPTransmitter::receive()
 	const int recvbuflen = 512;
 
 	do {
-		int received = recv(ListenSocket, recvbuf, recvbuflen, 0);
+		int received = recv(ListenSocket, recvbuf, sizeof(char), 0);
 
 		// For future use, when asserts will be removed
 		if (received == SOCKET_ERROR)
 			lasterror = WSAGetLastError();
 				
-		assert(received == 1);
+		assert(received == sizeof(char));
 
 		char channelnamesize = recvbuf[0];
+
+		received = recv(ListenSocket, recvbuf, sizeof(char), 0);
+
+		if (received == SOCKET_ERROR)
+			lasterror = WSAGetLastError();
+
+		assert(received == sizeof(char));
+
+		MFTypes mfType = (MFTypes)recvbuf[0];
 
 		union {
 			char chars[4];
@@ -147,12 +148,9 @@ void UDPTransmitter::receive()
 		
 		string channelname(recvbuf, channelnamesize);
 
-		deque<char> *input = channels[channelname].get();
-
-		if (input == NULL) {
-			channels[channelname].reset(new deque<char>());
-			input = channels[channelname].get();
-		}
+		QueueItem *item = new QueueItem(datalength, mfType);
+		unique_ptr<QueueItem> itemPtr(item);
+		channels[channelname].push_front(move(itemPtr));
 
 		received = 0;
 		while (received < datalength) {
@@ -164,34 +162,11 @@ void UDPTransmitter::receive()
 			assert(iResult != SOCKET_ERROR);
 
 			for (int i = 0; i < iResult; i++) {
-				//j++;
-				input->push_back(recvbuf[i]);
+				item->push(recvbuf[i]);
 			}
-			//}
+
 			received += iResult;
 		}
-		
-
-		//if (j > 10000) {
-		//	int r = 0;
-		//	//std::this_thread::sleep_for(std::chrono::milliseconds(5));
-		//}
-
-		//if (j > 100000) {
-		//	int r = 0;
-		//	//std::this_thread::sleep_for(std::chrono::milliseconds(5));
-		//}
-
-		//if (j > 130000) {
-		//	int r = 0;
-		//	//std::this_thread::sleep_for(std::chrono::milliseconds(5));
-		//}
-
-		//if (iResult < recvbuflen) {
-		//	int r = 0;
-		//	//std::this_thread::sleep_for(std::chrono::milliseconds(5));
-		//}
-
 	} while (is_running);
 }
 
@@ -224,6 +199,12 @@ HRESULT UDPTransmitter::Write(const char *aByte, int aLength) {
 	return S_OK;
 }
 
-HRESULT UDPTransmitter::Read(char *aByte, int &aLength) {
+HRESULT UDPTransmitter::Read(string channelName, unique_ptr<QueueItem> &item) {
+	if (channels[channelName].empty())
+		return E_FAIL;
+
+	item = move(channels[channelName].front());
+	channels[channelName].pop_back();
+
 	return S_OK;
 }

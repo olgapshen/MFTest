@@ -1,5 +1,4 @@
 #include <string>
-//#include <xstring>
 
 #pragma once
 class Stringer

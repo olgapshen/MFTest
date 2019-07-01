@@ -15,18 +15,14 @@ TransmitterBase::TransmitterBase(std::string aAdress, int aPort)
 {
 	address = aAdress;
 	port = aPort;
-	//input.reset(new deque<char>());
 	ConnectSocket = INVALID_SOCKET;
 }
 
 TransmitterBase::~TransmitterBase()
 {
-	//if (result == S_OK) 
-	//{
 	freeaddrinfo(resultSend);
 	WSACleanup();
 	closesocket(ConnectSocket);
 	is_running = false;
 	receiver->join();
-	//}
 }

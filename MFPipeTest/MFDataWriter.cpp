@@ -6,19 +6,19 @@
 #include <cassert>
 
 #include "Stringer.h"
+#include "MFTypes.h"
 
 using namespace std;
 
 MFDataWriter::MFDataWriter(TransmitterBase &aSender) : sender(aSender) { }
 
-void MFDataWriter::getIMFBuffer(BSTR _bsChannel, IMFBuffer *buffer, char *&data, LONG &length) {
+void MFDataWriter::getIMFBuffer(IMFBuffer *buffer, char *&data, LONG &length) {
 	LONG cbMaxSize = 0, cbActualSize = 0;
 	LONGLONG lpData = NULL;
 	buffer->BufferLock(eMFLT_NoLock, &cbMaxSize, &cbActualSize, &lpData);
 	LPBYTE _q = (LPBYTE)lpData;
 	data = reinterpret_cast<char*>(_q);
 	length = cbActualSize;
-	//return sender.Write(converted, cbActualSize);
 }
 
 HRESULT MFDataWriter::send(BSTR _bsChannel, IUnknown* _pMFrameOrPacket) {
@@ -35,9 +35,11 @@ HRESULT MFDataWriter::send(BSTR _bsChannel, IUnknown* _pMFrameOrPacket) {
 
 	char* data;
 	LONG length;
+	char type;
 
 	if (pBuffer = dynamic_cast<IMFBuffer*>(_pMFrameOrPacket)) {
-		getIMFBuffer(_bsChannel, pBuffer, data, length);
+		getIMFBuffer(pBuffer, data, length);
+		type = (char)MFTypes::MFBuffer;
 	}
 	else {
 		return E_FAIL;
@@ -46,11 +48,12 @@ HRESULT MFDataWriter::send(BSTR _bsChannel, IUnknown* _pMFrameOrPacket) {
 	LongCharUnion.longvalue = length;
 
 	sender.Write(&size, 1);
+	sender.Write(&type, 1);
 	sender.Write(LongCharUnion.chars, sizeof(LONG));
 	sender.Write(channel.c_str(), size);
 	sender.Write(data, length);
 
-	std::this_thread::sleep_for(std::chrono::milliseconds(100000));
+	//std::this_thread::sleep_for(std::chrono::milliseconds(100000));
 
 	return S_OK;
 }

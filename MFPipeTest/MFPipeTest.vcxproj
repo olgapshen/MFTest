@@ -145,6 +145,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="QueueItem.cpp" />
     <ClCompile Include="Stringer.cpp" />
     <ClCompile Include="TransmitterBase.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -165,9 +166,11 @@
     <ClInclude Include="dllmain.h" />
     <ClInclude Include="MFDataReader.h" />
     <ClInclude Include="MFDataWriter.h" />
+    <ClInclude Include="MFTypes.h" />
     <ClInclude Include="MIDL32\MDefines.h" />
     <ClInclude Include="MIDL32\MFPipeTest_i.h" />
     <ClInclude Include="MIDL32\MInterfaces.h" />
+    <ClInclude Include="QueueItem.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Stringer.h" />
     <ClInclude Include="TransmitterBase.h" />

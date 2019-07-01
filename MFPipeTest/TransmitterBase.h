@@ -5,10 +5,15 @@
 #include <deque>
 #include <map>
 #include <string>
+#include <memory>
+
+#include "QueueItem.h"
 
 class TransmitterBase
 {
 protected:
+	std::map<std::string, std::deque<std::unique_ptr<QueueItem>>> channels;
+
 	std::string address;
 	int port;
 
@@ -26,11 +31,10 @@ protected:
 	sockaddr_in ServerAddr;
 	HRESULT result;
 	int lasterror;
-	std::map<std::string, std::unique_ptr<std::deque<char>>> channels;
 public:
 	TransmitterBase(std::string aAdress, int aPort);
 	virtual HRESULT Write(const char *aByte, int aLength) = 0;
-	virtual HRESULT Read(char *aByte, int &aLength) = 0;
+	virtual HRESULT Read(std::string channel, std::unique_ptr<QueueItem> &item) = 0;
 	virtual ~TransmitterBase();
 };
 

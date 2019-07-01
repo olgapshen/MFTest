@@ -3,6 +3,9 @@
 #include "../MFPipeTest/MIDL32/MFormats.h"
 #include "../MFPipeTest/MIDL32/MFPipeTest_i.h"
 
+#include <string>
+
+using namespace std;
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 #define PACKETS_COUNT	(8)
@@ -48,12 +51,15 @@ namespace UnitTestMFPipe
 				LONGLONG lpData = NULL;
 				arrMFBuffersIn[i]->BufferLock(eMFLT_NoLock, &cbMaxSize, &cbActualSize, &lpData);
 
-				// TODO: fill by test data here, memory pointer is (LPBYTE)lpData;
 				LPBYTE _q = (LPBYTE)lpData;
-				for (DWORD i = 0; i < cbSize; i++)
-					_q[i] = rand() % 0xFF;
 
-				//arrMFBuffersIn[i]->BufferUnlock();
+				_q[0] = 't';
+				_q[1] = 'e';
+				_q[2] = 's';
+				_q[3] = 't';
+
+				for (DWORD i = 4; i < cbSize; i++)
+					_q[i] = rand() % 0xFF;
 			}
 
 			//////////////////////////////////////////////////////////////////////////
@@ -119,17 +125,12 @@ namespace UnitTestMFPipe
 			Assert::IsNotNull(cpMFPipe_Read.p);
 			cpMFPipe_Read->PipeOpen(L"udp://127.0.0.1:12345", 32, NULL);
 
-			//////////////////////////////////////////////////////////////////////////
-			// Test code (single-threaded)
-			// TODO: multi-threaded
-
-			// Note: channels ( "ch1", "ch2" is optional), MFFrames support is optional
-
-			for (int i = 0; i < 128; ++i)
+			for (int i = 0; i < 2; ++i)
 			{
-				//arrMFBuffersIn[i % PACKETS_COUNT]->
+				CComPtr<IMFBuffer> bufferIn = arrMFBuffersIn[i % PACKETS_COUNT];
+				
 				// Write to pipe
-				cpMFPipe_Write->PipePut(L"ch1", arrMFBuffersIn[i % PACKETS_COUNT], 0, NULL);
+				cpMFPipe_Write->PipePut(L"ch1", bufferIn, 0, NULL);
 				cpMFPipe_Write->PipePut(L"ch2", arrMFBuffersIn[(i + 1) % PACKETS_COUNT], 0, NULL);
 				cpMFPipe_Write->PipeMessagePut(L"ch1", ppszEvents[i % PACKETS_COUNT], ppszMessages[i % PACKETS_COUNT], arrMFBuffersIn[i % PACKETS_COUNT], NULL);
 				cpMFPipe_Write->PipeMessagePut(L"ch2", ppszEvents[(i + 1) % PACKETS_COUNT], ppszMessages[(i + 1) % PACKETS_COUNT], arrMFBuffersIn[(i + 1) % PACKETS_COUNT], NULL);
@@ -159,10 +160,26 @@ namespace UnitTestMFPipe
 				cpMFPipe_Write->PipeGet(L"ch2", &arrObjectsOut[5], 100 * DS_MSEC, NULL);
 				cpMFPipe_Write->PipeGet(L"ch2", &arrObjectsOut[6], 100 * DS_MSEC, NULL);
 
-				// TODO: Your test code here
-			}
-			
-		}
+				IUnknown *unknownOut = arrObjectsOut[0].p;
+				Assert::IsNotNull(unknownOut);
 
+				IMFBuffer *bufferOut = dynamic_cast<IMFBuffer*>(unknownOut);
+				LONG cbMaxSize = 0, cbActualSize = 0;
+				LONGLONG lpData = NULL;
+				arrMFBuffersIn[i]->BufferLock(eMFLT_NoLock, &cbMaxSize, &cbActualSize, &lpData);
+
+				LPBYTE _q = (LPBYTE)lpData;
+
+				char data[4];
+				data[0] = _q[0];
+				data[1] = _q[1];
+				data[2] = _q[2];
+				data[3] = _q[3];
+
+				string str(data, 4);
+				string sentStr("test");
+				Assert::AreEqual(sentStr, str);
+			}
+		}
 	};
 }

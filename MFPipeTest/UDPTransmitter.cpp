@@ -187,7 +187,9 @@ HRESULT UDPTransmitter::Write(const char *aByte, int aLength) {
 
 		int iResult = send(ConnectSocket, aByte + copied, size, 0);
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(10));
+		// Sure that data readen in other side
+		std::this_thread::sleep_for(std::chrono::milliseconds(WAIT_ON_WRITE));
+
 		if (iResult == SOCKET_ERROR) {
 			int err = WSAGetLastError();
 			return E_FAIL;

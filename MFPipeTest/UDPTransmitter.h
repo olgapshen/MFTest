@@ -11,6 +11,8 @@
 class UDPTransmitter : public TransmitterBase
 {
 private:
+	const int WAIT_ON_WRITE = 10;
+
 	void receive() override;
 public:
 	UDPTransmitter(std::string aAdress, int aPort);

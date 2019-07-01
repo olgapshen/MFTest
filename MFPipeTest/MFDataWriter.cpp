@@ -12,6 +12,8 @@ using namespace std;
 
 MFDataWriter::MFDataWriter(TransmitterBase &aSender) : sender(aSender) { }
 
+MFDataWriter::~MFDataWriter() {}
+
 void MFDataWriter::getIMFBuffer(IMFBuffer *buffer, char *&data, LONG &length) {
 	LONG cbMaxSize = 0, cbActualSize = 0;
 	LONGLONG lpData = NULL;
@@ -53,11 +55,5 @@ HRESULT MFDataWriter::send(BSTR _bsChannel, IUnknown* _pMFrameOrPacket) {
 	sender.Write(channel.c_str(), size);
 	sender.Write(data, length);
 
-	//std::this_thread::sleep_for(std::chrono::milliseconds(100000));
-
 	return S_OK;
-}
-
-MFDataWriter::~MFDataWriter()
-{
 }

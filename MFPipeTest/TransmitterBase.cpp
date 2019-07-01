@@ -24,5 +24,6 @@ TransmitterBase::~TransmitterBase()
 	WSACleanup();
 	closesocket(ConnectSocket);
 	is_running = false;
-	receiver->join();
+	receiver->detach();
+	//receiver->join();
 }

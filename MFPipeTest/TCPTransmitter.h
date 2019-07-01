@@ -11,9 +11,9 @@ class TCPTransmitter : public TransmitterBase
 private:
 	void receive() override;
 public:
-	TCPTransmitter(PCWSTR aAdress, int aPort);
+	TCPTransmitter(std::string aAdress, int aPort);
 	~TCPTransmitter();
-	HRESULT Write(char *aByte, int aLength) override;
+	HRESULT Write(const char *aByte, int aLength) override;
 	HRESULT Read(char *aByte, int &aLength) override;
 };
 

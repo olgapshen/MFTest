@@ -3,7 +3,7 @@
 
 using namespace std;
 
-TCPTransmitter::TCPTransmitter(PCWSTR aAdress, int aPort) : TransmitterBase(aAdress, aPort)
+TCPTransmitter::TCPTransmitter(string aAdress, int aPort) : TransmitterBase(aAdress, aPort)
 {
 	//int err;
 	//WSAStartup(MAKEWORD(2, 2), &wsaData);
@@ -118,7 +118,7 @@ HRESULT TCPTransmitter::Read(char *aByte, int &aLength) {
 	return S_OK;
 }
 
-HRESULT TCPTransmitter::Write(char *aByte, int aLength) {
+HRESULT TCPTransmitter::Write(const char *aByte, int aLength) {
 
 	int iResult;//,maxlen = 512;
 	//char* recvbuf = new char[maxlen];

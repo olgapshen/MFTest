@@ -14,6 +14,7 @@
 #include "MFDataReader.h"
 #include "MFDataWriter.h"
 #include "MFormats.h"
+#include "Stringer.h"
 
 // CCoMFPipeTest
 
@@ -34,16 +35,8 @@ STDMETHODIMP CCoMFPipeTest::PipeConnectedGetByIndex( /*[in]*/ int _nIndex, /*[ou
 
 STDMETHODIMP CCoMFPipeTest::PipeCreate( /*[in]*/ BSTR _bsPipeID, /*[in]*/ BSTR _bsHints)
 {
-	//CComPtr<IMFPipe> mfPipe;
-	//HRESULT __h = mfPipe.CoCreateInstance(__uuidof(MFPipe));
-	//HRESULT res = mfPipe->PipeCreate(_bsPipeID, _bsHints);
-
 	assert(_bsPipeID != nullptr);
-	_bstr_t bstrIntermediate(_bsPipeID);
-	CString strFinal;
-	strFinal.Format(_T("%s"), (LPCTSTR)bstrIntermediate);
-	CT2CA pszConvertedAnsiString(strFinal);
-	std::string saddr(pszConvertedAnsiString);
+	string saddr = Stringer::getString(_bsPipeID);
 
 	std::regex pattern("(.{3}):\\/\\/([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}):([0-9]+)");
 	std::smatch match;
@@ -54,15 +47,16 @@ STDMETHODIMP CCoMFPipeTest::PipeCreate( /*[in]*/ BSTR _bsPipeID, /*[in]*/ BSTR _
 	string ip = match[2];
 	string port = match[3];
 	
-	std::wstring wIp = std::wstring(ip.begin(), ip.end());
+	//std::wstring wIp = std::wstring(ip.begin(), ip.end());
 	int iPort = atoi(port.c_str());
-	PCWSTR pwIp = wIp.c_str();
+	//PCWSTR pwIp = wIp.c_str();
+	//string address()
 
 	if (proto == "udp") {
-		transmitter.reset(new UDPTransmitter(pwIp, iPort));
+		transmitter.reset(new UDPTransmitter(ip, iPort));
 	}
 	else if (proto == "tcp") {
-		transmitter.reset(new TCPTransmitter(pwIp, iPort));
+		transmitter.reset(new TCPTransmitter(ip, iPort));
 	}
 	else {
 		return E_FAIL;
@@ -73,7 +67,6 @@ STDMETHODIMP CCoMFPipeTest::PipeCreate( /*[in]*/ BSTR _bsPipeID, /*[in]*/ BSTR _
 
 STDMETHODIMP CCoMFPipeTest::PipeOpenDirect( /*[in]*/ IMFPipe* _pSourcePipeObj, /*[in]*/ int _nMaxBuffers, /*[in]*/ BSTR _bsHints)
 {
-	//MFPipe mfPipe;
 	return E_NOTIMPL;
 }
 
@@ -86,7 +79,7 @@ STDMETHODIMP CCoMFPipeTest::PipePut( /*[in]*/ BSTR _bsChannel, /*[in]*/ IUnknown
 {
 	TransmitterBase *base = transmitter.get();
 	MFDataWriter writer(*base);
-	writer.send(_pMFrameOrPacket);
+	writer.send(_bsChannel, _pMFrameOrPacket);
 	return S_OK;
 }
 

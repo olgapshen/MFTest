@@ -7,10 +7,10 @@ class MFDataWriter
 {
 private:
 	TransmitterBase &sender;
-	HRESULT sendIMFBuffer(IMFBuffer *buffer);
+	void getIMFBuffer(BSTR _bsChannel, IMFBuffer *buffer, char *&data, LONG &length);
 public:
 	MFDataWriter(TransmitterBase &sender);
-	HRESULT send(IUnknown* _pMFrameOrPacket);
+	HRESULT send(BSTR _bsChannel, IUnknown* _pMFrameOrPacket);
 	~MFDataWriter();
 };
 

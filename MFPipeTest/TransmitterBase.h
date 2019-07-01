@@ -3,11 +3,13 @@
 #include <memory>
 #include <thread>
 #include <deque>
+#include <map>
+#include <string>
 
 class TransmitterBase
 {
 protected:
-	PCWSTR adress;
+	std::string address;
 	int port;
 
 	std::unique_ptr<std::thread> receiver;
@@ -23,10 +25,11 @@ protected:
 	
 	sockaddr_in ServerAddr;
 	HRESULT result;
-	std::unique_ptr<std::deque<char>> input;
+	int lasterror;
+	std::map<std::string, std::unique_ptr<std::deque<char>>> channels;
 public:
-	TransmitterBase(PCWSTR aAdress, int aPort);
-	virtual HRESULT Write(char *aByte, int aLength) = 0;
+	TransmitterBase(std::string aAdress, int aPort);
+	virtual HRESULT Write(const char *aByte, int aLength) = 0;
 	virtual HRESULT Read(char *aByte, int &aLength) = 0;
 	virtual ~TransmitterBase();
 };

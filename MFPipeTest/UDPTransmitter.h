@@ -11,9 +11,9 @@ class UDPTransmitter : public TransmitterBase
 private:
 	void receive() override;
 public:
-	UDPTransmitter(PCWSTR aAdress, int aPort);
+	UDPTransmitter(std::string aAdress, int aPort);
 	~UDPTransmitter();
-	HRESULT Write(char *aByte, int aLength) override;
+	HRESULT Write(const char *aByte, int aLength) override;
 	HRESULT Read(char *aByte, int &aLength) override;
 };
 

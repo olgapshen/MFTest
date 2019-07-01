@@ -145,6 +145,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Stringer.cpp" />
     <ClCompile Include="TransmitterBase.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -168,6 +169,7 @@
     <ClInclude Include="MIDL32\MFPipeTest_i.h" />
     <ClInclude Include="MIDL32\MInterfaces.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="Stringer.h" />
     <ClInclude Include="TransmitterBase.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />

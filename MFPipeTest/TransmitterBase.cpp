@@ -25,5 +25,4 @@ TransmitterBase::~TransmitterBase()
 	closesocket(ConnectSocket);
 	is_running = false;
 	receiver->detach();
-	//receiver->join();
 }

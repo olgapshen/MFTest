@@ -115,5 +115,6 @@ STDMETHODIMP CCoMFPipeTest::PipeFlush( /*[in]*/ BSTR _bsChannel, /*[in]*/ eMFFla
 
 STDMETHODIMP CCoMFPipeTest::PipeClose()
 {
-	return E_NOTIMPL;
+	transmitter.release();
+	return S_OK;
 }

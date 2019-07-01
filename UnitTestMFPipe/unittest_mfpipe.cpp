@@ -180,6 +180,8 @@ namespace UnitTestMFPipe
 				string sentStr("test");
 				Assert::AreEqual(sentStr, str);
 			}
+
+			cpMFPipe_Write->PipeClose();
 		}
 	};
 }
